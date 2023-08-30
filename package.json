@@ -1,0 +1,20 @@
+{
+  "name": "c2_main",
+  "version": "1.0.0",
+  "description": "main server backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "c2",
+    "master"
+  ],
+  "author": "sl1der",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "ip": "^1.1.8"
+  }
+}
