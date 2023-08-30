@@ -1,4 +1,0 @@
-[LOG]: 12/08/2023: GAME.exe GAME.exe.config GAME.pdb mal.dll mal.pdb Newtonsoft.Json.dll Newtonsoft.Json.xml System.Json.dll System.Json.xml
-[LOG]: 12/08/2023: desktop-4rhg0b2\sihaab
-[LOG]: 15/08/2023: desktop-4rhg0b2\sihaab
-[LOG]: 15/08/2023: desktop-4rhg0b2\sihaab
