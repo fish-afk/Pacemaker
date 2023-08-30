@@ -12,3 +12,8 @@ But please make sure you have the following versions:
 ```node v16.18.1```
 ```npm v8.10.0```
 
+clone the repo then run:
+
+```npm install```
+```node server.js```
+
