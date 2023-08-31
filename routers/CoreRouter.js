@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const Module = require('./module')
+const Module = require('../modules/CoreModule')
 
 router.get('/getcmd', Module.GETCMD);
 router.get('/postresult', Module.recieve_result);
