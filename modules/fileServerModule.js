@@ -1,9 +1,9 @@
 const path = require('path');
 
 function serveStaticFile(req, res) {
-	const requestedPath = req.params.filename;
+	const Filename = req.params.filename;
 	const staticFolder = path.join(__dirname, "../servedFiles");
-	const filePath = path.resolve(path.join(staticFolder, requestedPath));
+	const filePath = path.resolve(path.join(staticFolder, Filename));
 
 	if (!filePath.startsWith(staticFolder)) {
 		res.status(403).send("Forbidden");
@@ -17,4 +17,12 @@ function serveStaticFile(req, res) {
 	});
 }
 
-module.exports = { serveStaticFile }
+function uploadStaticFile(req, res)  {
+	 if (!req.file) {
+			res.status(400).send("No file uploaded.");
+			return;
+	}
+	res.status(200).send("File uploaded successfully.");
+}
+
+module.exports = { serveStaticFile, uploadStaticFile }
