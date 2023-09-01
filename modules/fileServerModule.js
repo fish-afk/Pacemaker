@@ -1,7 +1,10 @@
 const path = require('path');
 
 function serveStaticFile(req, res) {
-	const Filename = req.params.filename;
+	const Filename = req.query.filename;
+	if (Filename == undefined) {
+		return res.send('Please specify a filename')
+	}
 	const staticFolder = path.join(__dirname, "../servedFiles");
 	const filePath = path.resolve(path.join(staticFolder, Filename));
 
@@ -17,12 +20,12 @@ function serveStaticFile(req, res) {
 	});
 }
 
-function uploadStaticFile(req, res)  {
-	 if (!req.file) {
-			res.status(400).send("No file uploaded.");
-			return;
+function uploadStaticFile(req, res) {
+	if (!req.file) {
+		res.status(400).send("No file uploaded.");
+		return;
 	}
-	res.status(200).send("File uploaded successfully.");
+	return res.status(200).send("File uploaded successfully.");
 }
 
 module.exports = { serveStaticFile, uploadStaticFile }

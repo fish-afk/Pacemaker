@@ -1,15 +1,16 @@
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 
 const app = express();
 
-const port = 3000 || process.env.PORT;
+const port = process.env.PORT || 3000;
 
-const CoreRouter = require('./routers/CoreRouter')
-const FileServerRouter = require('./routers/fileServerRouter')
+const CoreRouter = require("./routers/CoreRouter");
+const FileServerRouter = require("./routers/fileServerRouter");
 
-app.use('/core', CoreRouter);
-app.use('/files', FileServerRouter)
+app.use("/core", CoreRouter);
+app.use("/files", FileServerRouter);
 
 app.listen(port, () => {
-    console.log("App is listening on " + port)
-})
+	console.log("App is listening on " + port);
+});
