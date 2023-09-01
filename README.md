@@ -6,6 +6,9 @@ This project is solely intended to be used for educational purposes.
 
 The framework is still under heavy development and is not meant to work as expected, because of different configs on each of your machines.
 
+You will need to create you own .env file with following variable/s:
+
+```PORT```
 
 But please make sure you have the following versions:
 

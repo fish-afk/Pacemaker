@@ -11,14 +11,13 @@ function GETCMD(req, res) {
 }
 
 function Get_shell(req, res) {
+
 	const ip = "10.10.10.10";
+
 	const port = 4000;
+
+	return res.send({ status: true, ip: ip, port: port })
 	
-	if (process.env.GET_SHELL == 'TRUE') {
-		return res.send({status: true, ip: ip, port: port})
-	} else {
-		return res.send({status: false, message: 'die'})
-	}
 }
 
 function funeral(req, res) {
