@@ -10,6 +10,8 @@ You will need to create you own .env file with following variable/s:
 
 ```PORT```
 
+```UPLOADKEY```
+
 But please make sure you have the following versions:
 
 ```node v16.18.1```
