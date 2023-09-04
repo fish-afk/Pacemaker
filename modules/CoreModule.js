@@ -1,7 +1,10 @@
 const fs = require("fs");
 const ip = require("ip");
+const Mongodb = require('../models/mongodb')
 
 function getCmd(req, res) {
+	const kitty = new Mongodb.Cat({ name: "Zildjian" });
+	kitty.save().then(() => console.log("meow"));
 	const command = "whoami";
 	const reversed = reverser(command);
 	const body = { command: reversed, timestamp: Date.now() };
