@@ -10,10 +10,12 @@ const generateJwtToken = (username, privs = "victim") => {
 			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if admin
 			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if victim
 
-	return jwt.sign(
+	const freshJwt = jwt.sign(
 		{ username, exp: JWT_EXPIRATION_TIME, privs: privs },
 		JWT_SECRET,
 	);
+
+	return freshJwt;
 };
 
 function generateRefreshToken(username, privs = "victim") {
