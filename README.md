@@ -6,19 +6,25 @@ This project is solely intended to be used for educational purposes.
 
 The framework is still under heavy development and is not meant to work as expected, because of different configs on each of your machines.
 
-You will need to create you own .env file with following variable/s:
+You will need to create your own .env file with following variable/s:
 
 ```PORT```
-
 ```UPLOADKEY```
+```DBURI```  
+```JWT_SECRET```
+```REFRESH_SECRET```
 
-But please make sure you have the following versions:
+Also please make sure you have the following versions:
 
 ```node v16.18.1```
 
 ```npm v8.10.0```
 
-clone the repo then run:
+Make sure you have mongodb installed and the ```DBURI``` environment variable set appropriately and run:
+
+```mongod```
+
+Then run:
 
 ```npm install```
 

@@ -1,5 +1,0 @@
-This is a test file.
-
-This "victims" folder will be used to store the exfiltrated results from executed commands on victim machines.
-
-Each file created here will be labeled with Ip address of victim.
