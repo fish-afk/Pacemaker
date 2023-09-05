@@ -3,7 +3,7 @@ const path = require('path');
 function serveStaticFile(req, res) {
 	const Filename = req.query.filename;
 	if (Filename == undefined) {
-		return res.send('Please specify a filename')
+		return res.status(400).send('Please specify a filename')
 	}
 	const staticFolder = path.join(__dirname, "../servedFiles");
 	const filePath = path.resolve(path.join(staticFolder, Filename));
