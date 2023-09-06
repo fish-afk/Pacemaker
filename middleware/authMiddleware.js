@@ -28,6 +28,17 @@ function generateRefreshToken(username, privs = "victim") {
 		REFRESH_SECRET,
 	);
 
+	const filter = { _id: username }; // Change this to your desired filter criteria
+	const update = { refreshToken: refreshToken };
+
+	mongodb.Victims.findOneAndUpdate(filter, update, { new: true }, (err) => {
+		if (err) {
+			console.error("Error updating the document: ", err);
+		} else {
+			console.log("Updated refreshToken for victim: " + username);
+		}
+	});
+
 	return refreshToken;
 }
 
@@ -58,6 +69,49 @@ function verifyJWT(req, res, next) {
 	});
 }
 
+const verifyRefreshToken = (token, username, res) => {
+	try {
+		// Verify the token and decode the payload
+		const decoded = jwt.verify(token, REFRESH_SECRET);
+
+		if (decoded.username !== username) {
+			return res.status(404).send({ auth: false, message: "Token mismatch" });
+		}
+
+		if (decoded.privs == "victim") {
+			mongodb.Victims.findOne({ refreshToken: token }, (err, doc) => {
+				if (err || !doc) {
+					return res.status(401).send({
+						status: false,
+						message: "Invalid refresh token, Log in again...",
+					});
+				}
+				// Check that the refresh token has not expired
+				if (doc.expires < new Date()) {
+					return res.status(401).send({
+						status: false,
+						message: "Refresh token has expired, Log in again...",
+					});
+				}
+				// Generate a new JWT for the user with the ID stored in the refresh token
+				const jwt = generateJwtToken(decoded.username, decoded.privs);
+				// Send the new JWT to the client
+				res.send({ status: true, freshJwt: jwt });
+			});
+		}
+	} catch (err) {
+		if (err.message == "jwt expired")
+			return res.send({
+				status: false,
+				message: "Refresh token has expired",
+			});
+		return res.send({
+			status: false,
+			mesage: "Invalid refresh token",
+		});
+	}
+};
+
 const fileUploadMiddleware = (req, res, next) => {
 	const uploadkey = req.headers["uploadkey"];
 
@@ -76,4 +130,5 @@ module.exports = {
 	generateJwtToken,
 	verifyJWT,
 	generateRefreshToken,
+	verifyRefreshToken,
 };

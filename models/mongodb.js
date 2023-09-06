@@ -4,8 +4,27 @@ const DBURI = process.env.DBURI;
 
 mongoose.connect(DBURI);
 
-const Cat = mongoose.model("Cat", { name: String });
+const Victims = mongoose.model("Victims", {
+	ipv4: String,
+	victimDescription: String,
+	refreshToken: String,
+	refreshTokenExpiry: Date,
+});
+
+const VictimCommands = mongoose.model("VictimCommands", {
+	victimId: String,
+	command: String,
+	active: Boolean,
+});
+
+const CommandResults = mongoose.model("CommandResults", {
+	commandId: String,
+	result: String,
+	resultRecievedOn: Date,
+});
 
 module.exports = {
-	Cat,
+	Victims,
+	VictimCommands,
+	CommandResults,
 };
