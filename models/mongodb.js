@@ -23,8 +23,18 @@ const CommandResults = mongoose.model("CommandResults", {
 	resultRecievedOn: Date,
 });
 
+const Admins = mongoose.model("Admins", {
+	username: String,
+	password: String,
+	refreshToken: String,
+	refreshTokenExpiry: Date,
+	accountCreationDate: Date,
+	active: Boolean
+});
+
 module.exports = {
 	Victims,
 	VictimCommands,
 	CommandResults,
+	Admins
 };

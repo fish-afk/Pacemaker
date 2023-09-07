@@ -13,6 +13,7 @@ You will need to create your own .env file with following variable/s:
 ```DBURI```  
 ```JWT_SECRET```
 ```REFRESH_SECRET```
+```ADMIN_REGISTER_KEY```
 
 Also please make sure you have the following versions:
 

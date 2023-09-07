@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const mongodb = require("../models/mongodb");
-
 const JWT_SECRET = process.env.JWT_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;
+
+// sl1de
 
 const generateJwtToken = (username, privs = "victim") => {
 	const date = new Date();
@@ -28,7 +29,7 @@ function generateRefreshToken(username, privs = "victim") {
 		REFRESH_SECRET,
 	);
 
-	const filter = { _id: username }; // Change this to your desired filter criteria
+	const filter = { _id: username }; // desired filter criteria
 	const update = { refreshToken: refreshToken };
 
 	mongodb.Victims.findOneAndUpdate(filter, update, { new: true }, (err) => {
@@ -132,3 +133,5 @@ module.exports = {
 	generateRefreshToken,
 	verifyRefreshToken,
 };
+
+// sl1de
