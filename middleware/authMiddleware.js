@@ -8,7 +8,7 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET;
 const generateJwtToken = (username, privs = "victim") => {
 	const date = new Date();
 	const JWT_EXPIRATION_TIME =
-		privs === "admin"
+		privs === "Admin"
 			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if admin
 			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if victim
 
@@ -20,7 +20,7 @@ const generateJwtToken = (username, privs = "victim") => {
 	return freshJwt;
 };
 
-function generateRefreshToken(username, privs = "victim") {
+async function generateRefreshToken(username, privs = "victim") {
 	const date = new Date();
 	const REFRESH_EXPIRATION_TIME = date.setMonth(date.getMonth() + 1); // 1 month from now
 
@@ -36,34 +36,20 @@ function generateRefreshToken(username, privs = "victim") {
 
 	if (privs == "victim") {
 		const filterVictim = { _id: username }; // desired filter criteria
-		mongodb.Victims.findOneAndUpdate(
+		const updateq = await mongodb.Victims.findOneAndUpdate(
 			filterVictim,
 			update,
 			{ new: true },
-			(err) => {
-				if (err) {
-					console.error("Error updating the document: ", err);
-				} else {
-					console.log("Updated refreshToken for victim: " + username);
-				}
-			},
-		);
+		).exec();
 	} 
 
 	if (privs == 'Admin') {
 		const filterAdmin = { username: username }; // desired filter criteria
-		mongodb.Admins.findOneAndUpdate(
+		const updateq = await mongodb.Admins.findOneAndUpdate(
 			filterAdmin,
 			update,
 			{ new: true },
-			(err) => {
-				if (err) {
-					console.error("Error updating the document: ", err);
-				} else {
-					console.log("Updated refreshToken for victim: " + username);
-				}
-			},
-		);
+		).exec();
 	}
 		
 
