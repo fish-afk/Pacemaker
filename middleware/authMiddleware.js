@@ -28,17 +28,44 @@ function generateRefreshToken(username, privs = "victim") {
 		{ username, exp: REFRESH_EXPIRATION_TIME, privs: privs },
 		REFRESH_SECRET,
 	);
+	
+	const update = {
+		refreshToken: refreshToken,
+		refreshTokenExpiry: REFRESH_EXPIRATION_TIME,
+	};
 
-	const filter = { _id: username }; // desired filter criteria
-	const update = { refreshToken: refreshToken };
+	if (privs == "victim") {
+		const filterVictim = { _id: username }; // desired filter criteria
+		mongodb.Victims.findOneAndUpdate(
+			filterVictim,
+			update,
+			{ new: true },
+			(err) => {
+				if (err) {
+					console.error("Error updating the document: ", err);
+				} else {
+					console.log("Updated refreshToken for victim: " + username);
+				}
+			},
+		);
+	} 
 
-	mongodb.Victims.findOneAndUpdate(filter, update, { new: true }, (err) => {
-		if (err) {
-			console.error("Error updating the document: ", err);
-		} else {
-			console.log("Updated refreshToken for victim: " + username);
-		}
-	});
+	if (privs == 'Admin') {
+		const filterAdmin = { username: username }; // desired filter criteria
+		mongodb.Admins.findOneAndUpdate(
+			filterAdmin,
+			update,
+			{ new: true },
+			(err) => {
+				if (err) {
+					console.error("Error updating the document: ", err);
+				} else {
+					console.log("Updated refreshToken for victim: " + username);
+				}
+			},
+		);
+	}
+		
 
 	return refreshToken;
 }

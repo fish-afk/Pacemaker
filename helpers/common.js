@@ -11,7 +11,7 @@ function reverser(cmd) {
 	let reversed = "";
 	for (let i = cmd.length - 1; i >= 0; i--) {
 		reversed += cmd[i];
-	}
+	} 
 
 	return reversed;
 }
