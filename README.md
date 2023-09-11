@@ -4,7 +4,8 @@ A custom c2 framework project for a custom made malware client.
 
 This project is solely intended to be used for educational purposes.
 
-The framework is still under heavy development and is not meant to work as expected, because of different configs on each of your machines.
+The framework is still under heavy development and is not meant to work as expected, because of different versions on your pc. Hence,
+using docker is recommended
 
 You will need to create your own .env file with following variable/s:
 
@@ -36,6 +37,8 @@ for a continuous development experience:
 ```npm install -g nodemon```
 
 ```nodemon server.js```
+
+# Docker
 
 Docker build:
 
