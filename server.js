@@ -20,7 +20,7 @@ const coreRouter = require("./routers/CoreRouter");
 const fileServerRouter = require("./routers/fileServerRouter");
 const adminRouter = require("./routers/adminRouter");
 
-app.set("trust proxy", 1); // to trust loadbalancers like nginx so that, that ip doesn`t get limited.
+app.set("trust proxy", true); // to trust loadbalancers like nginx so that, that ip doesn`t get limited.
 
 app.use("/core", limiter, coreRouter);
 app.use("/files", limiter, fileServerRouter);

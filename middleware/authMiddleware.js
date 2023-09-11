@@ -51,7 +51,6 @@ async function generateRefreshToken(username, privs = "victim") {
 			{ new: true },
 		).exec();
 	}
-		
 
 	return refreshToken;
 }
@@ -97,14 +96,14 @@ const verifyRefreshToken = (token, username, res) => {
 				if (err || !doc) {
 					return res.status(401).send({
 						status: false,
-						message: "Invalid refresh token, Log in again...",
+						message: "Invalid refresh token",
 					});
 				}
 				// Check that the refresh token has not expired
 				if (doc.expires < new Date()) {
 					return res.status(401).send({
 						status: false,
-						message: "Refresh token has expired, Log in again...",
+						message: "Refresh token has expired",
 					});
 				}
 				// Generate a new JWT for the user with the ID stored in the refresh token

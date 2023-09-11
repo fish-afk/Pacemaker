@@ -1,5 +1,6 @@
-const ip = require("ip");
+
 const mongodb = require("../models/mongodb");
+const sanitize = require("mongo-sanitize");
 const helper = require("../helpers/common");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -15,12 +16,16 @@ async function register(req, res) {
 			.status(400)
 			.send({ status: "failure", message: "Invalid register key" });
 	} else {
-		const check = await mongodb.Admins.findOne({ username: username }).exec();
-		
+		const clean_username = sanitize(username);
+		const clean_password = sanitize(password);
+		const check = await mongodb.Admins.findOne({
+			username: clean_username,
+		}).exec();
+
 		if (check == null) {
 			const record = new mongodb.Admins({
-				username: username,
-				password: password,
+				username: clean_username,
+				password: clean_password,
 				accountCreationDate: new Date(),
 				active: true,
 			});
@@ -30,12 +35,15 @@ async function register(req, res) {
 				.then(async () => {
 					console.log("New admin created !");
 					const refreshToken = await authMiddleware.generateRefreshToken(
-						username,
+						clean_username,
 						"Admin",
 					);
-					const jwtToken = authMiddleware.generateJwtToken(username, "Admin");
+					const jwtToken = authMiddleware.generateJwtToken(
+						clean_username,
+						"Admin",
+					);
 
-					return res.send({ jwtToken, refreshToken });
+					return res.status(200).send({ jwtToken, refreshToken });
 				})
 				.catch((err) => {
 					console.log(err);
@@ -52,11 +60,39 @@ async function register(req, res) {
 	}
 }
 
-function login(req, res) {}
+async function login(req, res) {
+	const { username, password } = req.body;
+
+	if (!username || !password) {
+		return res.send({ status: false, message: "Missing details" });
+	} else {
+		const clean_username = sanitize(username);
+		const clean_password = sanitize(password);
+
+		const check = await mongodb.Admins.findOne({
+			username: clean_username,
+			password: clean_password,
+		}).exec();
+
+		if (check == null) {
+			return res
+				.status(400)
+				.send({ status: false, message: "Invalid credentials" });
+		} else {
+			const jwtToken = authMiddleware.generateJwtToken(clean_username, "Admin");
+			const refreshToken = authMiddleware.generateRefreshToken(
+				clean_username,
+				"Admin",
+			);
+
+			return res.status(200).send({ status: true, jwtToken, refreshToken });
+		}
+	}
+}
 
 const refresh = async (req, res) => {
-	const refreshToken = req.body.refreshToken;
-	const username = req.body.username;
+	const refreshToken = sanitize(req.body.refreshToken);
+	const username = sanitize(req.body.username);
 
 	if (!refreshToken || !username) {
 		return res.send({ message: "No Token Provided!" });

