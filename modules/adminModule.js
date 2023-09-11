@@ -1,4 +1,3 @@
-
 const mongodb = require("../models/mongodb");
 const sanitize = require("mongo-sanitize");
 const helper = require("../helpers/common");
@@ -14,7 +13,7 @@ async function register(req, res) {
 	if (register_key !== process.env.ADMIN_REGISTER_KEY) {
 		return res
 			.status(400)
-			.send({ status: "failure", message: "Invalid register key" });
+			.send({ status: false, message: "Invalid register key" });
 	} else {
 		const clean_username = sanitize(username);
 		const clean_password = sanitize(password);
@@ -49,11 +48,11 @@ async function register(req, res) {
 					console.log(err);
 					return res
 						.status(500)
-						.send({ status: "failure", message: "Unknown error" });
+						.send({ status: false, message: "Unknown error" });
 				});
 		} else {
 			return res.status(400).send({
-				status: "failure",
+				status: false,
 				message: "Username exists or unknown error occured",
 			});
 		}
@@ -95,7 +94,7 @@ const refresh = async (req, res) => {
 	const username = sanitize(req.body.username);
 
 	if (!refreshToken || !username) {
-		return res.send({ message: "No Token Provided!" });
+		return res.send({status: false, message: "No Token Provided!" });
 	}
 	await authMiddleware.verifyRefreshToken(refreshToken, username, res);
 };

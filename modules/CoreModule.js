@@ -1,10 +1,9 @@
-const mongodb = require('../models/mongodb')
-const helper = require('../helpers/common')
+const mongodb = require("../models/mongodb");
+const helper = require("../helpers/common");
 const sanitize = require("mongo-sanitize");
 const authMiddleware = require("../middleware/authMiddleware");
 
 async function initialHandshake(req, res) {
-
 	const ipv4 = req.ip;
 	const currentDate = helper.getCurrentDate();
 	const victimHostname = sanitize(req.body["hostname"]);
@@ -32,13 +31,13 @@ async function initialHandshake(req, res) {
 
 				return res
 					.status(200)
-					.send({ jwtToken, refreshToken, username: record._id });
+					.send({ status: true, jwtToken, refreshToken, username: record._id });
 			})
 			.catch((err) => {
 				console.log(err);
 				return res
 					.status(500)
-					.send({ status: "failure", message: "Unknown error" });
+					.send({ status: false, message: "Unknown error" });
 			});
 	}
 }
@@ -70,5 +69,5 @@ module.exports = {
 	getCmd,
 	postResult,
 	killSwitch,
-	refresh
+	refresh,
 };

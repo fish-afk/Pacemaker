@@ -28,7 +28,7 @@ async function generateRefreshToken(username, privs = "victim") {
 		{ username, exp: REFRESH_EXPIRATION_TIME, privs: privs },
 		REFRESH_SECRET,
 	);
-	
+
 	const update = {
 		refreshToken: refreshToken,
 		refreshTokenExpiry: REFRESH_EXPIRATION_TIME,
@@ -41,15 +41,13 @@ async function generateRefreshToken(username, privs = "victim") {
 			update,
 			{ new: true },
 		).exec();
-	} 
+	}
 
-	if (privs == 'Admin') {
+	if (privs == "Admin") {
 		const filterAdmin = { username: username }; // desired filter criteria
-		const updateq = await mongodb.Admins.findOneAndUpdate(
-			filterAdmin,
-			update,
-			{ new: true },
-		).exec();
+		const updateq = await mongodb.Admins.findOneAndUpdate(filterAdmin, update, {
+			new: true,
+		}).exec();
 	}
 
 	return refreshToken;
@@ -61,12 +59,14 @@ function verifyJWT(req, res, next) {
 	const token = req.body["jwt-key"];
 
 	if (!token) {
-		return res.status(401).send({ auth: false, message: "No token provided." });
+		return res
+			.status(401)
+			.send({ status: false, message: "No token provided." });
 	}
 	// Verify the JWT and check that it is valid
 	jwt.verify(token, JWT_SECRET, (err, decoded) => {
 		if (err) {
-			return res.status(404).send({ auth: false, message: err.message });
+			return res.status(404).send({ status: false, message: err.message });
 		}
 		if (decoded.exp < Date.now() / 1000) {
 			return res.status(401).send("JWT has expired");
@@ -74,7 +74,7 @@ function verifyJWT(req, res, next) {
 		// If the JWT is valid, save the decoded user information in the request object
 		// so that it is available for the next middleware function
 		if (decoded.username != username) {
-			return res.status(404).send({ auth: false, message: "Token mismatch" }); // Token is not this users, but another users
+			return res.status(404).send({ status: false, message: "Token mismatch" }); // Token is not this users, but another users
 		}
 
 		req.decoded = decoded;
@@ -88,7 +88,7 @@ const verifyRefreshToken = (token, username, res) => {
 		const decoded = jwt.verify(token, REFRESH_SECRET);
 
 		if (decoded.username !== username) {
-			return res.status(404).send({ auth: false, message: "Token mismatch" });
+			return res.status(404).send({ status: false, message: "Token mismatch" });
 		}
 
 		if (decoded.privs == "victim") {
@@ -129,11 +129,11 @@ const fileUploadMiddleware = (req, res, next) => {
 	const uploadkey = req.headers["uploadkey"];
 
 	if (uploadkey == undefined) {
-		return res.status(403).send("Unauthorized");
+		return res.status(403).send({ status: true, mesage: "Unauthorized"});
 	}
 
 	if (uploadkey !== process.env.UPLOADKEY) {
-		return res.status(403).send("Unauthorized");
+		return res.status(403).send({ status: true, message: "Unauthorized"});
 	}
 	next();
 };
