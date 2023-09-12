@@ -48,6 +48,8 @@ async function generateRefreshToken(username, privs = "victim") {
 		const updateq = await mongodb.Admins.findOneAndUpdate(filterAdmin, update, {
 			new: true,
 		}).exec();
+
+		console.log(updateq)
 	}
 
 	return refreshToken;
@@ -55,13 +57,13 @@ async function generateRefreshToken(username, privs = "victim") {
 
 function verifyJWT(req, res, next) {
 	// Get the user's username from the decoded token
-	const username = req.body["username"];
-	const token = req.body["jwt-key"];
+	const username = req.headers["username"];
+	const token = req.headers["jwt-key"];
 
-	if (!token) {
+	if (!token || !username) {
 		return res
 			.status(401)
-			.send({ status: false, message: "No token provided." });
+			.send({ status: false, message: "Missing auth headers !" });
 	}
 	// Verify the JWT and check that it is valid
 	jwt.verify(token, JWT_SECRET, (err, decoded) => {

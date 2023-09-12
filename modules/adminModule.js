@@ -79,7 +79,7 @@ async function login(req, res) {
 				.send({ status: false, message: "Invalid credentials" });
 		} else {
 			const jwtToken = authMiddleware.generateJwtToken(clean_username, "Admin");
-			const refreshToken = authMiddleware.generateRefreshToken(
+			const refreshToken = await authMiddleware.generateRefreshToken(
 				clean_username,
 				"Admin",
 			);

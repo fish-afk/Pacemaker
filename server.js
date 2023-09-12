@@ -16,11 +16,11 @@ const limiter = rateLimit({
 
 const port = process.env.PORT || 3000;
 
-const coreRouter = require("./routers/CoreRouter");
-const fileServerRouter = require("./routers/fileServerRouter");
-const adminRouter = require("./routers/adminRouter");
+const coreRouter = require("./routers/coreRouter_");
+const fileServerRouter = require("./routers/fileServerRouter_");
+const adminRouter = require("./routers/adminRouter_");
 
-app.set("trust proxy", true); // to trust loadbalancers like nginx so that, that ip doesn`t get limited.
+app.set("trust proxy", 1); // to trust loadbalancers like nginx so that, that ip doesn`t get limited.
 
 app.use("/core", limiter, coreRouter);
 app.use("/files", limiter, fileServerRouter);

