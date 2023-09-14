@@ -354,5 +354,5 @@ module.exports = {
 	commandHistory,
 	clearCommandHistory,
 	commandResultHistory,
-	clearCommandResultHistory
+	clearCommandResultHistory,
 };

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Module = require("../modules/fileServerModule");
 const multerMiddleware = require("../middleware/multer");
-const authMiddleware = require("../middleware/authMiddleware")
+const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/getFile", authMiddleware.verifyJWT, Module.serveStaticFile);
 router.post(

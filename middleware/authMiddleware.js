@@ -49,7 +49,7 @@ async function generateRefreshToken(username, privs = "victim") {
 			new: true,
 		}).exec();
 
-		console.log(updateq)
+		console.log(updateq);
 	}
 
 	return refreshToken;
@@ -131,11 +131,11 @@ const fileUploadMiddleware = (req, res, next) => {
 	const uploadkey = req.headers["uploadkey"];
 
 	if (uploadkey == undefined) {
-		return res.status(403).send({ status: true, mesage: "Unauthorized"});
+		return res.status(403).send({ status: true, mesage: "Unauthorized" });
 	}
 
 	if (uploadkey !== process.env.UPLOADKEY) {
-		return res.status(403).send({ status: true, message: "Unauthorized"});
+		return res.status(403).send({ status: true, message: "Unauthorized" });
 	}
 	next();
 };

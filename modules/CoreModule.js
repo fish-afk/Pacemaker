@@ -106,21 +106,17 @@ async function killSwitch(req, res) {
 
 	if (!username) {
 		return res.send({ status: false, message: "Broken request" });
-	} else { 
+	} else {
 		try {
 			await mongodb.Victims.deleteOne({ victimId: sanitize(username) }).exec();
-			return res
-				.status(200)
-				.send({ status: true, data: "Killed victim" });
+			return res.status(200).send({ status: true, data: "Killed victim" });
 		} catch (e) {
 			console.log(e);
 			return res
 				.status(500)
 				.send({ status: false, data: "Unknown error occured" });
 		}
-		
 	}
-
 }
 
 const refresh = async (req, res) => {
