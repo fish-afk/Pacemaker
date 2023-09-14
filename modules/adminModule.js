@@ -25,7 +25,7 @@ async function register(req, res) {
 			const record = new mongodb.Admins({
 				username: clean_username,
 				password: clean_password,
-				accountCreationDate: new Date(),
+				accountCreationDate: helper.getCurrentDate(),
 				active: true,
 			});
 

