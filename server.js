@@ -26,6 +26,10 @@ app.use("/core", limiter, coreRouter);
 app.use("/files", limiter, fileServerRouter);
 app.use("/admin", limiter, adminRouter);
 
+app.get("*", (req, res) => {
+	res.status(404).send({ status: false, message: "404 not found" });
+});
+
 app.listen(port, () => {
 	console.log("App is listening on " + port);
 });

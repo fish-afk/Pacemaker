@@ -2,13 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Module = require("../modules/adminModule");
 const authMiddleware = require("../middleware/authMiddleware");
-const path = require("path")
+const path = require("path");
 
-router.get("/", function (req, res) {
-	res.sendFile(path.join(__dirname, "../static/index.html"));
+// static
+
+router.get("/login", function (req, res) {
+	res.sendFile(path.join(__dirname, "../static/login.html"));
+});
+
+router.get("/register", function (req, res) {
+	res.sendFile(path.join(__dirname, "../static/register.html"));
+});
+
+router.get("/dashboard", function (req, res) {
+	res.sendFile(path.join(__dirname, "../static/dashboard.html"));
 });
 
 // admin auth
+
 router.post("/login", Module.login);
 router.post("/register", Module.register);
 router.post("/refresh", Module.refresh);
