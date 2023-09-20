@@ -22,7 +22,9 @@ const generateJwtToken = (username, privs = "victim") => {
 
 async function generateRefreshToken(username, privs = "victim") {
 	const date = new Date();
-	const REFRESH_EXPIRATION_TIME = date.setMonth(date.getMonth() + 1); // 1 month from now
+	const REFRESH_EXPIRATION_TIME = (privs == "victim"
+		? date.setMonth(date.getMonth() + 6) // 6 months from now
+		: date.setMonth(date.getMonth() + 1)); // 1 month from now
 
 	const refreshToken = jwt.sign(
 		{ username, exp: REFRESH_EXPIRATION_TIME, privs: privs },
