@@ -4,8 +4,8 @@ const Module = require("../modules/fileServerModule");
 const multerMiddleware = require("../middleware/multer");
 const authMiddleware = require("../middleware/authMiddleware");
 
-router.get("/getFile", authMiddleware.verifyJWT, Module.serveStaticFile);
-router.post(
+router.post("/getFile", authMiddleware.verifyJWT, Module.serveStaticFile);
+router.put(
 	"/uploadfile",
 	authMiddleware.fileUploadMiddleware,
 	multerMiddleware.upload.single("file"),

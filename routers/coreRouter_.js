@@ -3,10 +3,10 @@ const router = express.Router();
 const Module = require("../modules/CoreModule");
 const authMiddleware = require("../middleware/authMiddleware");
 
-router.get("/initialhandshake", Module.initialHandshake);
-router.get("/getcmd", authMiddleware.verifyJWT, Module.getCmd);
-router.post("/postresult", authMiddleware.verifyJWT, Module.postResult);
-router.delete("/killswitch", authMiddleware.verifyJWT, Module.killSwitch);
-router.get("/refresh", Module.refresh);
+router.put("/initialhandshake", Module.initialHandshake);
+router.post("/getcmd", authMiddleware.verifyJWT, Module.getCmd);
+router.put("/postresult", authMiddleware.verifyJWT, Module.postResult);
+router.patch("/killswitch", authMiddleware.verifyJWT, Module.killSwitch);
+router.post("/refresh", Module.refresh);
 
 module.exports = router;

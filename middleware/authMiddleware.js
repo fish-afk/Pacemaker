@@ -9,8 +9,8 @@ const generateJwtToken = (username, privs = "victim") => {
 	const date = new Date();
 	const JWT_EXPIRATION_TIME =
 		privs === "Admin"
-			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if admin
-			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if victim
+			? Math.floor(date.getTime() / 1000) + 60 * 20 // 20 minutes from now if admin
+			: Math.floor(date.getTime() / 1000) + 60 * 40; // 40 minutes from now if victim
 
 	const freshJwt = jwt.sign(
 		{ username, exp: JWT_EXPIRATION_TIME, privs: privs },
@@ -59,13 +59,13 @@ async function generateRefreshToken(username, privs = "victim") {
 
 function verifyJWT(req, res, next) {
 	// Get the user's username from the decoded token
-	const username = req.headers["username"];
-	const token = req.headers["jwt-key"];
+	const username = req.body["username"];
+	const token = req.body["jwt-key"];
 
 	if (!token || !username) {
 		return res
 			.status(401)
-			.send({ status: false, message: "Missing auth headers !" });
+			.send({ status: false, message: "Missing auth fields !" });
 	}
 	// Verify the JWT and check that it is valid
 	jwt.verify(token, JWT_SECRET, (err, decoded) => {
