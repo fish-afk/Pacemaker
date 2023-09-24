@@ -73,7 +73,7 @@ function verifyJWT(req, res, next) {
 			return res.status(404).send({ status: false, message: err.message });
 		}
 		if (decoded.exp < Date.now() / 1000) {
-			return res.status(401).send("JWT has expired");
+			return res.status(401).send({ status: false, message: "JWT has expired" });
 		}
 		// If the JWT is valid, save the decoded user information in the request object
 		// so that it is available for the next middleware function
