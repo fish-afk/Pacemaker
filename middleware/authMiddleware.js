@@ -71,7 +71,7 @@ function verifyJWT(req, res, next) {
 	// Verify the JWT and check that it is valid
 	jwt.verify(token, JWT_SECRET, (err, decoded) => {
 		if (err) {
-			return res.status(404).send({ status: false, message: err.message });
+			return res.status(401).send({ status: false, message: err.message });
 		}
 		if (decoded.exp < Date.now() / 1000) {
 			return res
@@ -81,7 +81,7 @@ function verifyJWT(req, res, next) {
 		// If the JWT is valid, save the decoded user information in the request object
 		// so that it is available for the next middleware function
 		if (decoded.username != username) {
-			return res.status(404).send({ status: false, message: "Token mismatch" }); // Token is not this users, but another users
+			return res.status(401).send({ status: false, message: "Token mismatch" }); // Token is not this users, but another users
 		}
 
 		req.decoded = decoded;
@@ -115,8 +115,10 @@ const verifyRefreshToken = (token, username, res) => {
 				}
 				// Generate a new JWT for the user with the ID stored in the refresh token
 				const jwt = generateJwtToken(decoded.username, decoded.privs);
+
+				console.log(jwt)
 				// Send the new JWT to the client
-				res.send({ status: true, freshJwt: jwt });
+				res.status(201).send({ status: true, freshJwt: jwt });
 			});
 		}
 	} catch (err) {
@@ -136,11 +138,11 @@ const fileUploadMiddleware = (req, res, next) => {
 	const uploadkey = req.headers["uploadkey"];
 
 	if (uploadkey == undefined) {
-		return res.status(403).send({ status: true, mesage: "Unauthorized" });
+		return res.status(401).send({ status: true, mesage: "Unauthorized" });
 	}
 
 	if (uploadkey !== process.env.UPLOADKEY) {
-		return res.status(403).send({ status: true, message: "Unauthorized" });
+		return res.status(401).send({ status: true, message: "Unauthorized" });
 	}
 	next();
 };
