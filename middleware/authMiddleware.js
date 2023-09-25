@@ -22,9 +22,10 @@ const generateJwtToken = (username, privs = "victim") => {
 
 async function generateRefreshToken(username, privs = "victim") {
 	const date = new Date();
-	const REFRESH_EXPIRATION_TIME = (privs == "victim"
-		? date.setMonth(date.getMonth() + 6) // 6 months from now
-		: date.setMonth(date.getMonth() + 1)); // 1 month from now
+	const REFRESH_EXPIRATION_TIME =
+		privs == "victim"
+			? date.setMonth(date.getMonth() + 6) // 6 months from now
+			: date.setMonth(date.getMonth() + 1); // 1 month from now
 
 	const refreshToken = jwt.sign(
 		{ username, exp: REFRESH_EXPIRATION_TIME, privs: privs },
@@ -60,7 +61,7 @@ async function generateRefreshToken(username, privs = "victim") {
 function verifyJWT(req, res, next) {
 	// Get the user's username from the decoded token
 	const username = req.body["username"];
-	const token = req.body["jwt-key"];
+	const token = req.body["jwt_key"];
 
 	if (!token || !username) {
 		return res
@@ -73,7 +74,9 @@ function verifyJWT(req, res, next) {
 			return res.status(404).send({ status: false, message: err.message });
 		}
 		if (decoded.exp < Date.now() / 1000) {
-			return res.status(401).send({ status: false, message: "JWT has expired" });
+			return res
+				.status(401)
+				.send({ status: false, message: "JWT has expired" });
 		}
 		// If the JWT is valid, save the decoded user information in the request object
 		// so that it is available for the next middleware function

