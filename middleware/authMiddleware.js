@@ -89,7 +89,7 @@ function verifyJWT(req, res, next) {
 	});
 }
 
-const verifyRefreshToken = (token, username, res) => {
+const verifyRefreshToken = async (token, username, res) => {
 	try {
 		// Verify the token and decode the payload
 		const decoded = jwt.verify(token, REFRESH_SECRET);
@@ -99,27 +99,39 @@ const verifyRefreshToken = (token, username, res) => {
 		}
 
 		if (decoded.privs == "victim") {
-			mongodb.Victims.findOne({ refreshToken: token }, (err, doc) => {
-				if (err || !doc) {
-					return res.status(401).send({
-						status: false,
-						message: "Invalid refresh token",
-					});
-				}
-				// Check that the refresh token has not expired
-				if (doc.expires < new Date()) {
-					return res.status(401).send({
-						status: false,
-						message: "Refresh token has expired",
-					});
-				}
+
+			const check = await mongodb.Victims.findOne({ refreshToken: token }).exec();
+
+			if (check == null) {
+				return res.status(401).send({
+					status: false,
+					message: "Invalid refresh token",
+				});
+			} else {
 				// Generate a new JWT for the user with the ID stored in the refresh token
 				const jwt = generateJwtToken(decoded.username, decoded.privs);
 
-				console.log(jwt)
+				
 				// Send the new JWT to the client
 				res.status(201).send({ status: true, freshJwt: jwt });
-			});
+			}
+		} else {
+			const check = await mongodb.Admins.findOne({
+				refreshToken: token,
+			}).exec();
+
+			if (check == null) {
+				return res.status(401).send({
+					status: false,
+					message: "Invalid refresh token",
+				});
+			} else {
+				// Generate a new JWT for the user with the ID stored in the refresh token
+				const jwt = generateJwtToken(decoded.username, decoded.privs);
+
+				// Send the new JWT to the client
+				res.status(201).send({ status: true, freshJwt: jwt });
+			}
 		}
 	} catch (err) {
 		if (err.message == "jwt expired")
