@@ -129,6 +129,7 @@ async function killSwitch(req, res) {
 	} else {
 		try {
 			await mongodb.Victims.deleteOne({ victimId: sanitize(username) }).exec();
+			console.log('Killed');
 			return res.status(200).send({ status: true, data: "Killed victim" });
 		} catch (e) {
 			console.log(e);
