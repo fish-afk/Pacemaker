@@ -147,7 +147,7 @@ const verifyRefreshToken = async (token, username, res) => {
 };
 
 const fileUploadMiddleware = (req, res, next) => {
-	const uploadkey = req.headers["uploadkey"];
+	const uploadkey = req.query["uploadkey"];
 
 	if (uploadkey == undefined) {
 		return res.status(401).send({ status: true, mesage: "Unauthorized" });
