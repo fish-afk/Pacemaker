@@ -38,7 +38,7 @@ for a continuous development experience:
 
 ```nodemon server.js```
 
-# workflow
+# control flow
 
 ![worfkflow image](https://github.com/fish-afk/Pacemaker/blob/main/c2_flow.drawio.png)
 
