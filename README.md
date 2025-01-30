@@ -15,7 +15,7 @@ You will need to create your own .env file with following variable/s:
 ```REFRESH_SECRET```
 ```ADMIN_REGISTER_KEY```
 
- sure you have the following versions:
+recommended node and npm versions:
 
 ```node v16.18.1```
 
