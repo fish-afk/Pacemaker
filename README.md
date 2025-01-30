@@ -4,10 +4,6 @@ A custom c2 framework project for a custom made malware client.
 
 code for client: https://github.com/fish-afk/PacemakerClient
 
-## Disclaimar: This project is solely intended to be used for educational purposes.
-
-## Note: this project is not yet finished.
-
 The framework is still under heavy development and is not meant to work as expected, because of different versions on your pc. Hence,
 using docker is recommended
 
@@ -56,4 +52,6 @@ Docker run:
 
 ```docker run -d -p3000:3000 pacemaker_c2```
 
+## Disclaimar: This project is solely intended to be used for educational purposes.
+## Note: this project is unfinished. make adjustments and additions as needed.
 
