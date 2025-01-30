@@ -51,6 +51,6 @@ Docker run:
 
 ```docker run -d -p3000:3000 pacemaker_c2```
 
-## Disclaimar: This project is solely intended to be used for educational purposes.
+## Disclaimer: This project is solely intended to be used for educational purposes.
 ## Note: The project is unfinished. make adjustments and additions as needed.
 
